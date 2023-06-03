@@ -1,7 +1,10 @@
+import MineSwipper from './components/MineSweeper';
+import './styles/global.css';
+
 function App() {
   return (
     <>
-      <>HI</>
+      <MineSwipper />
     </>
   );
 }

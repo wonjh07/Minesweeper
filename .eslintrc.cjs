@@ -48,19 +48,6 @@ module.exports = {
 
     '@typescript-eslint/no-parameter-properties': 'off',
 
-    'no-restricted-imports': [
-      'error',
-      {
-        paths: [
-          {
-            name: 'util',
-            importNames: ['isArray'],
-            message: '`Array.isArray`를 대신 사용해주세요!',
-          },
-        ],
-      },
-    ],
-
     'no-async-promise-executor': 'warn',
     '@typescript-eslint/prefer-as-const': 'warn',
     '@typescript-eslint/no-non-null-asserted-optional-chain': 'warn',
