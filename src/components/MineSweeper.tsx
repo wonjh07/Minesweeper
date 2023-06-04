@@ -1,78 +1,40 @@
-import { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { BsFlag, BsFillFlagFill } from 'react-icons/bs';
-import { initMap } from './utils';
+import { AiFillSmile, AiOutlineSmile } from 'react-icons/ai';
+import Buttons from './Buttons';
+import { useCallback, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { setMineMap } from '../store/minesSlice';
+import { initMap, textColor } from './utils';
+import { setGameState, setMineMap, setVstMap } from '../store/minesSlice';
 
 const MineSwipper = () => {
-  const yNum = 10;
-  const xNum = 10;
-  const mines = 10;
-  const vst = new Array<number[]>(yNum)
-    .fill([])
-    .map(() => new Array<number>(xNum).fill(0));
-  const [vstMap, setVstMap] = useState<number[][]>(vst);
+  const { yNum, xNum } = useAppSelector((state) => state.mines.option);
   const dispatch = useAppDispatch();
-  const mineMap = useAppSelector((state) => state.mines.mineMap);
 
-  const newMinesMap = useCallback(() => {
-    const temp = initMap(yNum, xNum, [0, 0], mines);
+  const initMinesMap = useCallback(() => {
+    const temp = initMap(yNum, xNum, 0, 0, 0);
     dispatch(setMineMap(temp));
+  }, [dispatch, yNum, xNum]);
+
+  const initVstMap = useCallback(() => {
+    const vst = new Array<number[]>(yNum)
+      .fill([])
+      .map(() => new Array<number>(xNum).fill(0));
+    dispatch(setVstMap(vst));
+  }, [dispatch, yNum, xNum]);
+
+  const stopGame = useCallback(() => {
+    dispatch(setGameState(false));
   }, [dispatch]);
 
+  const resetGame = useCallback(() => {
+    initMinesMap();
+    initVstMap();
+    stopGame();
+  }, [initMinesMap, initVstMap, stopGame]);
+
   useEffect(() => {
-    newMinesMap();
-  }, [newMinesMap]);
-
-  const btnState = (yi: number, xi: number) => {
-    const temp = [...vstMap];
-    if (temp[yi][xi] === 0) {
-      temp[yi][xi] = 1;
-    }
-    setVstMap(temp);
-  };
-
-  const btnFlag = (yi: number, xi: number) => {
-    const temp = [...vstMap];
-    if (temp[yi][xi] === 0) {
-      temp[yi][xi] = 2;
-    } else if (temp[yi][xi] === 2) {
-      temp[yi][xi] = 0;
-    }
-    setVstMap(temp);
-  };
-
-  const spawnBtn = () => {
-    return vstMap.map((y, yi) =>
-      y.map((x, xi) => (
-        <Button
-          key={`${yi} ${xi}`}
-          checked={x === 1}
-          onContextMenu={(e) => {
-            e.preventDefault();
-            btnFlag(yi, xi);
-          }}
-          onClick={() => {
-            btnState(yi, xi);
-          }}>
-          {x === 1 && mineMap[yi][xi]}
-          {x === 2 && (
-            <Flag>
-              <BsFillFlagFill
-                size={12}
-                style={{ position: 'absolute', color: '#D63725' }}
-              />
-              <BsFlag
-                size={12}
-                style={{ position: 'relative', color: '#303031' }}
-              />
-            </Flag>
-          )}
-        </Button>
-      )),
-    );
-  };
+    resetGame();
+  }, [resetGame]);
 
   return (
     <>
@@ -84,12 +46,22 @@ const MineSwipper = () => {
           <GameBox>
             <TimerBox>
               <Timer></Timer>
-              <SmileBox></SmileBox>
+              <SmileBox
+                onClick={() => {
+                  resetGame();
+                }}>
+                <AiOutlineSmile
+                  size={26}
+                  style={{ position: 'absolute', color: 'black' }}
+                />
+                <AiFillSmile
+                  size={26}
+                  style={{ position: 'absolute', color: 'yellow' }}
+                />
+              </SmileBox>
               <Timer></Timer>
             </TimerBox>
-            <GridBox wd={xNum} ht={yNum}>
-              {spawnBtn()}
-            </GridBox>
+            <Buttons />
           </GameBox>
         </FlexBox>
       </Container>
@@ -126,54 +98,9 @@ const GameBox = styled.div`
   border-radius: 1px;
 `;
 
-const GridBox = styled.div<{ wd: number; ht: number }>`
-  width: 100%;
-  height: 100%;
-  display: grid;
-  box-sizing: border-box;
-  border-bottom: 2px solid #f1f3f4;
-  border-right: 2px solid #f1f3f4;
-  border-top: 3px solid #606367;
-  border-left: 3px solid #606367;
-  grid-template-columns: repeat(${(props) => props.wd}, 1.2rem);
-  grid-template-rows: repeat(${(props) => props.ht}, 1.2rem);
-  grid-gap: 1px;
-  background-color: gray;
-  border-radius: 1px;
-`;
-
-const Button = styled.div<{ checked: boolean }>`
-  width: 1.2rem;
-  height: 1.2rem;
-  background-color: ${(props) => (props.checked ? '#cccccc' : '#B9B9B9')};
-  border-radius: ${(props) => (props.checked ? '' : '1px')};
-  border-bottom: ${(props) => (props.checked ? '' : '2px solid #606367')};
-  border-right: ${(props) => (props.checked ? '' : '2px solid #606367')};
-  border-top: ${(props) => (props.checked ? '' : '2px solid #f1f3f4')};
-  border-left: ${(props) => (props.checked ? '' : '2px solid #f1f3f4')};
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.6rem;
-  font-weight: bold;
-  user-select: none;
-  padding-top: 2px;
-  transition: 0.1s;
-  cursor: pointer;
-`;
-
-const Flag = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
 const TimerBox = styled.div`
   width: 100%;
-  height: 40px;
+  height: 2.4rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -186,18 +113,30 @@ const TimerBox = styled.div`
 `;
 
 const Timer = styled.div`
-  width: 20%;
+  width: 3.2rem;
   height: 100%;
   background-color: black;
 `;
 
 const SmileBox = styled.div`
   height: 100%;
-  box-sizing: border-box;
   aspect-ratio: 1;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-bottom: 3px solid #606367;
   border-right: 3px solid #606367;
   border-top: 2px solid #f1f3f4;
   border-left: 2px solid #f1f3f4;
+  background-color: #b9b9b9;
   cursor: pointer;
+
+  :active {
+    border-bottom: 3px solid #f1f3f4;
+    border-right: 3px solid #f1f3f4;
+    border-top: 2px solid #606367;
+    border-left: 2px solid #606367;
+    background-color: #cccccc;
+  }
 `;
