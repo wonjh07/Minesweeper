@@ -1,47 +1,52 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { BsFlag, BsFillFlagFill } from 'react-icons/bs';
+import { initMap } from './utils';
 
 const MineSwipper = () => {
-  const xNum = 16;
-  const yNum = 16;
-  const lst = new Array<number[]>(xNum)
+  const yNum = 10;
+  const xNum = 10;
+  const mines = 10;
+  const vst = new Array<number[]>(yNum)
     .fill([])
-    .map(() => new Array<number>(yNum).fill(0));
-  const [mineMap, setMineMap] = useState<number[][]>(lst);
+    .map(() => new Array<number>(xNum).fill(0));
+  const [vstMap, setVstMap] = useState<number[][]>(vst);
 
-  const btnState = (xi: number, yi: number) => {
-    const temp = [...mineMap];
-    if (temp[xi][yi] === 0) {
-      temp[xi][yi] = 1;
+  const btnState = (yi: number, xi: number) => {
+    const temp = [...vstMap];
+    if (temp[yi][xi] === 0) {
+      temp[yi][xi] = 1;
     }
-    setMineMap(temp);
+    setVstMap(temp);
   };
 
-  const btnFlag = (xi: number, yi: number) => {
-    const temp = [...mineMap];
-    if (temp[xi][yi] === 0) {
-      temp[xi][yi] = 2;
-    } else if (temp[xi][yi] === 2) {
-      temp[xi][yi] = 0;
+  const btnFlag = (yi: number, xi: number) => {
+    const temp = [...vstMap];
+    if (temp[yi][xi] === 0) {
+      temp[yi][xi] = 2;
+    } else if (temp[yi][xi] === 2) {
+      temp[yi][xi] = 0;
     }
-    setMineMap(temp);
+    setVstMap(temp);
   };
+
+  const mineMap = useMemo(() => initMap(yNum, xNum, [0, 0], mines), []);
 
   const spawnBtn = () => {
-    return mineMap.map((x, xi) =>
-      x.map((y, yi) => (
+    return vstMap.map((y, yi) =>
+      y.map((x, xi) => (
         <Button
-          key={`${xi} ${yi}`}
-          checked={y === 1}
+          key={`${yi} ${xi}`}
+          checked={x === 1}
           onContextMenu={(e) => {
             e.preventDefault();
-            btnFlag(xi, yi);
+            btnFlag(yi, xi);
           }}
           onClick={() => {
-            btnState(xi, yi);
+            btnState(yi, xi);
           }}>
-          {y === 2 && (
+          {x === 1 && mineMap[yi][xi]}
+          {x === 2 && (
             <Flag>
               <BsFillFlagFill
                 size={12}
