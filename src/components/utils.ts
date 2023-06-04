@@ -57,6 +57,7 @@ export const initMap = (
   return lst;
 };
 
+// BFS용 Node, Queue Class
 class Node {
   y: number;
   x: number;
@@ -114,12 +115,16 @@ export const detectZeros = (
   width: number,
   height: number,
 ) => {
+  // 주변 8칸에 대한 벡터값
   const dx = [0, 1, 1, 1, 0, -1, -1, -1];
   const dy = [-1, -1, 0, 1, 1, 1, 0, -1];
 
+  // que 생성
   const que = new Queue();
+  // que 초기값
   que.append(yi, xi);
 
+  // BFS로 연결된 0 주변 노드 확인해서 모두 오픈
   while (que) {
     const [y, x] = que.popleft();
     if (y === null || y === undefined || x === null || x === undefined) {
@@ -137,32 +142,5 @@ export const detectZeros = (
         }
       }
     }
-  }
-};
-
-export const textColor = (num: number) => {
-  if (num === 1) {
-    return 'blue';
-  }
-  if (num === 2) {
-    return 'green';
-  }
-  if (num === 3) {
-    return 'red';
-  }
-  if (num === 4) {
-    return 'indigo';
-  }
-  if (num === 5) {
-    return 'coral';
-  }
-  if (num === 6) {
-    return 'lime';
-  }
-  if (num === 7) {
-    return 'purple';
-  }
-  if (num === 8) {
-    return 'black';
   }
 };

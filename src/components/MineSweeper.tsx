@@ -2,35 +2,29 @@ import styled from 'styled-components';
 import { AiFillSmile, AiOutlineSmile } from 'react-icons/ai';
 import Buttons from './Buttons';
 import { useCallback, useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { initMap, textColor } from './utils';
-import { setGameState, setMineMap, setVstMap } from '../store/minesSlice';
+import { useAppDispatch } from '../store/hooks';
+import { initMineMap, initVstMap, setGameState } from '../store/minesSlice';
 
 const MineSwipper = () => {
-  const { yNum, xNum } = useAppSelector((state) => state.mines.option);
   const dispatch = useAppDispatch();
 
-  const initMinesMap = useCallback(() => {
-    const temp = initMap(yNum, xNum, 0, 0, 0);
-    dispatch(setMineMap(temp));
-  }, [dispatch, yNum, xNum]);
+  const resetMineMap = useCallback(() => {
+    dispatch(initMineMap());
+  }, [dispatch]);
 
-  const initVstMap = useCallback(() => {
-    const vst = new Array<number[]>(yNum)
-      .fill([])
-      .map(() => new Array<number>(xNum).fill(0));
-    dispatch(setVstMap(vst));
-  }, [dispatch, yNum, xNum]);
+  const resetVstMap = useCallback(() => {
+    dispatch(initVstMap());
+  }, [dispatch]);
 
   const stopGame = useCallback(() => {
     dispatch(setGameState(false));
   }, [dispatch]);
 
   const resetGame = useCallback(() => {
-    initMinesMap();
-    initVstMap();
+    resetMineMap();
+    resetVstMap();
     stopGame();
-  }, [initMinesMap, initVstMap, stopGame]);
+  }, [resetMineMap, resetVstMap, stopGame]);
 
   useEffect(() => {
     resetGame();

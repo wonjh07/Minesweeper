@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { detectZeros } from '../components/utils';
+import { detectZeros, initMap } from '../components/utils';
 interface OptionState {
   yNum: number;
   xNum: number;
@@ -9,6 +9,7 @@ interface OptionState {
 interface MineMapState {
   mineMap: number[][];
   vstMap: number[][];
+  flags: number;
   option: OptionState;
   started: boolean;
 }
@@ -27,6 +28,7 @@ const initialState: MineMapState = {
     [0, 0],
     [0, 0],
   ],
+  flags: 0,
   option: {
     yNum: 8,
     xNum: 8,
@@ -39,8 +41,25 @@ export const minesSlice = createSlice({
   name: 'mines',
   initialState: initialState,
   reducers: {
-    setMineMap: (state, action: PayloadAction<number[][]>) => {
-      state.mineMap = action.payload;
+    initVstMap: (state) => {
+      state.vstMap = new Array<number[]>(state.option.yNum)
+        .fill([])
+        .map(() => new Array<number>(state.option.yNum).fill(0));
+    },
+    initMineMap: (state) => {
+      state.mineMap = new Array<number[]>(state.option.yNum)
+        .fill([])
+        .map(() => new Array<number>(state.option.yNum).fill(0));
+    },
+    setMineMap: (state, action: PayloadAction<CoordinateState>) => {
+      const [y, x] = [action.payload.yi, action.payload.xi];
+      state.mineMap = initMap(
+        state.option.yNum,
+        state.option.xNum,
+        y,
+        x,
+        state.option.minesNum,
+      );
     },
     setVstMap: (state, action: PayloadAction<number[][]>) => {
       state.vstMap = action.payload;
@@ -55,7 +74,7 @@ export const minesSlice = createSlice({
           y,
           x,
           state.option.yNum,
-          state.option.yNum,
+          state.option.xNum,
         );
       }
       state.vstMap[y][x] = 1;
@@ -73,6 +92,8 @@ export const minesSlice = createSlice({
 });
 
 export const {
+  initMineMap,
+  initVstMap,
   setMineMap,
   setVstMap,
   openBtn,

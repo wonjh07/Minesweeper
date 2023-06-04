@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { useCallback } from 'react';
 import {
   openBtn,
   removeFlag,
@@ -8,7 +7,7 @@ import {
   setGameState,
   setMineMap,
 } from '../store/minesSlice';
-import { initMap, textColor } from './utils';
+import { textColor } from '../styles/theme';
 import { FaBomb } from 'react-icons/fa';
 import { BsFillFlagFill, BsFlag } from 'react-icons/bs';
 
@@ -17,17 +16,15 @@ const Buttons = () => {
   const vstMap = useAppSelector((state) => state.mines.vstMap);
   const started = useAppSelector((state) => state.mines.started);
   const dispatch = useAppDispatch();
-  const { yNum, xNum, minesNum } = useAppSelector(
-    (state) => state.mines.option,
-  );
+  const { yNum, xNum } = useAppSelector((state) => state.mines.option);
 
-  const newMinesMap = useCallback(
-    (sy: number, sx: number) => {
-      const temp = initMap(yNum, xNum, sy, sx, minesNum);
-      dispatch(setMineMap(temp));
-    },
-    [dispatch, yNum, xNum, minesNum],
-  );
+  const newMinesMap = (yi: number, xi: number) => {
+    dispatch(setMineMap({ yi, xi }));
+  };
+
+  const openButton = (yi: number, xi: number) => {
+    dispatch(openBtn({ yi, xi }));
+  };
 
   const startGame = () => {
     dispatch(setGameState(true));
@@ -35,13 +32,13 @@ const Buttons = () => {
 
   const failGame = () => {};
 
-  const btnState = (yi: number, xi: number) => {
+  const btnPush = (yi: number, xi: number) => {
     if (!started) {
       newMinesMap(yi, xi);
       startGame();
     }
     if (vstMap[yi][xi] === 0) {
-      dispatch(openBtn({ yi, xi }));
+      openButton(yi, xi);
     }
     if (vstMap[yi][xi] === -1) {
       failGame();
@@ -67,7 +64,7 @@ const Buttons = () => {
             btnFlag(yi, xi);
           }}
           onClick={() => {
-            btnState(yi, xi);
+            btnPush(yi, xi);
           }}>
           {x === 1 && (
             <BtnNums style={{ color: textColor(mineMap[yi][xi]) }}>
