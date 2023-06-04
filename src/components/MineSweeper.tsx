@@ -1,7 +1,9 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { BsFlag, BsFillFlagFill } from 'react-icons/bs';
 import { initMap } from './utils';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { setMineMap } from '../store/minesSlice';
 
 const MineSwipper = () => {
   const yNum = 10;
@@ -11,6 +13,17 @@ const MineSwipper = () => {
     .fill([])
     .map(() => new Array<number>(xNum).fill(0));
   const [vstMap, setVstMap] = useState<number[][]>(vst);
+  const dispatch = useAppDispatch();
+  const mineMap = useAppSelector((state) => state.mines.mineMap);
+
+  const newMinesMap = useCallback(() => {
+    const temp = initMap(yNum, xNum, [0, 0], mines);
+    dispatch(setMineMap(temp));
+  }, [dispatch]);
+
+  useEffect(() => {
+    newMinesMap();
+  }, [newMinesMap]);
 
   const btnState = (yi: number, xi: number) => {
     const temp = [...vstMap];
@@ -29,8 +42,6 @@ const MineSwipper = () => {
     }
     setVstMap(temp);
   };
-
-  const mineMap = useMemo(() => initMap(yNum, xNum, [0, 0], mines), []);
 
   const spawnBtn = () => {
     return vstMap.map((y, yi) =>
