@@ -11,6 +11,7 @@ interface MineMapState {
   vstMap: number[][];
   flags: number;
   option: OptionState;
+  customOption: OptionState;
   started: boolean;
 }
 
@@ -34,6 +35,11 @@ const initialState: MineMapState = {
     xNum: 8,
     minesNum: 10,
   },
+  customOption: {
+    yNum: 8,
+    xNum: 8,
+    minesNum: 10,
+  },
   started: false,
 };
 
@@ -44,12 +50,12 @@ export const minesSlice = createSlice({
     initVstMap: (state) => {
       state.vstMap = new Array<number[]>(state.option.yNum)
         .fill([])
-        .map(() => new Array<number>(state.option.yNum).fill(0));
+        .map(() => new Array<number>(state.option.xNum).fill(0));
     },
     initMineMap: (state) => {
       state.mineMap = new Array<number[]>(state.option.yNum)
         .fill([])
-        .map(() => new Array<number>(state.option.yNum).fill(0));
+        .map(() => new Array<number>(state.option.xNum).fill(0));
     },
     setMineMap: (state, action: PayloadAction<CoordinateState>) => {
       const [y, x] = [action.payload.yi, action.payload.xi];
@@ -88,6 +94,15 @@ export const minesSlice = createSlice({
     setGameState: (state, action: PayloadAction<boolean>) => {
       state.started = action.payload;
     },
+    setOptions: (state, action: PayloadAction<OptionState>) => {
+      state.option = action.payload;
+    },
+    setCustomMode: (state) => {
+      state.option = state.customOption;
+    },
+    setCustomOptions: (state, action: PayloadAction<OptionState>) => {
+      state.customOption = action.payload;
+    },
   },
 });
 
@@ -100,5 +115,8 @@ export const {
   setFlag,
   removeFlag,
   setGameState,
+  setOptions,
+  setCustomMode,
+  setCustomOptions,
 } = minesSlice.actions;
 export default minesSlice.reducer;

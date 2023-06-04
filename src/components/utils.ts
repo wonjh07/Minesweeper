@@ -112,8 +112,8 @@ export const detectZeros = (
   vst: number[][],
   yi: number,
   xi: number,
-  width: number,
   height: number,
+  width: number,
 ) => {
   // 주변 8칸에 대한 벡터값
   const dx = [0, 1, 1, 1, 0, -1, -1, -1];

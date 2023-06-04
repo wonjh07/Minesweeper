@@ -2,10 +2,12 @@ import styled from 'styled-components';
 import { AiFillSmile, AiOutlineSmile } from 'react-icons/ai';
 import Buttons from './Buttons';
 import { useCallback, useEffect } from 'react';
-import { useAppDispatch } from '../store/hooks';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { initMineMap, initVstMap, setGameState } from '../store/minesSlice';
+import OptionButton from './OptionButton';
 
 const MineSwipper = () => {
+  const option = useAppSelector((state) => state.mines.option);
   const dispatch = useAppDispatch();
 
   const resetMineMap = useCallback(() => {
@@ -28,7 +30,7 @@ const MineSwipper = () => {
 
   useEffect(() => {
     resetGame();
-  }, [resetGame]);
+  }, [resetGame, option]);
 
   return (
     <>
@@ -38,6 +40,7 @@ const MineSwipper = () => {
         }}>
         <FlexBox>
           <GameBox>
+            <OptionButton />
             <TimerBox>
               <Timer></Timer>
               <SmileBox
@@ -46,7 +49,7 @@ const MineSwipper = () => {
                 }}>
                 <AiOutlineSmile
                   size={26}
-                  style={{ position: 'absolute', color: 'black' }}
+                  style={{ position: 'relative', color: 'black' }}
                 />
                 <AiFillSmile
                   size={26}
