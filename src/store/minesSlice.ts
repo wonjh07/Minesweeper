@@ -1,15 +1,21 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import {
+  changeCustomOption,
   detectZeros,
   flagsFinder,
   initMap,
   minesFinder,
 } from '../components/utils';
 
-interface OptionState {
+export interface OptionState {
   yNum: number;
   xNum: number;
   minesNum: number;
+}
+
+interface SetCustomOptionsState {
+  target: 'yNum' | 'xNum' | 'minesNum';
+  data: number;
 }
 
 interface MineMapState {
@@ -109,12 +115,14 @@ export const minesSlice = createSlice({
       state.time++;
     },
     setFlag: (state, action: PayloadAction<CoordinateState>) => {
-      state.vstMap[action.payload.yi][action.payload.xi] = 2;
-      state.flags++;
-    },
-    removeFlag: (state, action: PayloadAction<CoordinateState>) => {
-      state.vstMap[action.payload.yi][action.payload.xi] = 0;
-      state.flags--;
+      const [y, x] = [action.payload.yi, action.payload.xi];
+      if (state.vstMap[y][x] === 0) {
+        state.vstMap[y][x] = 2;
+        state.flags++;
+      } else if (state.vstMap[y][x] === 2) {
+        state.vstMap[y][x] = 0;
+        state.flags--;
+      }
     },
     setGameState: (
       state,
@@ -128,8 +136,12 @@ export const minesSlice = createSlice({
     setCustomMode: (state) => {
       state.option = state.customOption;
     },
-    setCustomOptions: (state, action: PayloadAction<OptionState>) => {
-      state.customOption = action.payload;
+    setCustomOptions: (state, action: PayloadAction<SetCustomOptionsState>) => {
+      changeCustomOption(
+        state.customOption,
+        action.payload.target,
+        action.payload.data,
+      );
     },
     failGame: (state) => {
       minesFinder(
@@ -150,7 +162,6 @@ export const {
   openBtn,
   setTimeUp,
   setFlag,
-  removeFlag,
   setGameState,
   setOptions,
   setCustomMode,

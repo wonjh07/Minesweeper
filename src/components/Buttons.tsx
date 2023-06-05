@@ -3,7 +3,6 @@ import { useAppDispatch, useAppSelector } from '../store/hooks';
 import {
   failGame,
   openBtn,
-  removeFlag,
   setFlag,
   setGameState,
   setMineMap,
@@ -36,24 +35,24 @@ const Buttons = () => {
     dispatch(failGame());
   };
 
+  const btnFlag = (yi: number, xi: number) => {
+    dispatch(setFlag({ yi, xi }));
+  };
+
+  // btnPush() : 버튼이 눌리면 실행되는 함수
   const btnPush = (yi: number, xi: number) => {
+    // 첫번째 클릭에선 맵을 생성하고 게임이 시작
     if (status === 'idle') {
       newMinesMap(yi, xi);
       startGame();
     }
+    // 깃발이 아니거나 열려있지 않은 버튼을 오픈
     if (vstMap[yi][xi] === 0) {
       openButton(yi, xi);
     }
+    // 지뢰를 열었을때 게임에 실패
     if (mineMap[yi][xi] === -1) {
       mineBombs();
-    }
-  };
-
-  const btnFlag = (yi: number, xi: number) => {
-    if (vstMap[yi][xi] === 0) {
-      dispatch(setFlag({ yi, xi }));
-    } else if (vstMap[yi][xi] === 2) {
-      dispatch(removeFlag({ yi, xi }));
     }
   };
 

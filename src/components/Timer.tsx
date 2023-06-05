@@ -17,19 +17,17 @@ const Timer = () => {
     dispatch(failGame());
   }, [dispatch]);
 
+  // 게임이 시작되면 타이머 작동
   useEffect(() => {
     if (status === 'started') {
       const timer = setInterval(() => {
         timeUp();
       }, 1000);
       return () => clearInterval(timer);
-    } else if (status === 'idle') {
-      setTimeStr('000');
-    } else if (status === 'fail' || status === 'success') {
-      console.log('finish');
     }
   }, [status, timeUp]);
 
+  // 999초가 되면 게임에 실패
   useEffect(() => {
     if (time === 999) {
       mineBombs();

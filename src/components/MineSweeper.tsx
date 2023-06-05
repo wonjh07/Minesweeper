@@ -25,6 +25,7 @@ const MineSwipper = () => {
     dispatch(resetGame());
   }, [dispatch]);
 
+  // option이 변경되면 맵을 초기화
   useEffect(() => {
     reset();
   }, [reset, option]);

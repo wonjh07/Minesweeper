@@ -13,12 +13,12 @@ const SucessModal = () => {
     dispatch(setGameState('success'));
   }, [dispatch]);
 
+  // 지뢰를 제외한 모든 버튼을 클릭하면 게임에 성공
   useEffect(() => {
     if (buttons === 0) {
       finishGame();
       setOpen(true);
     }
-    console.log(buttons);
   }, [buttons, finishGame]);
 
   return (

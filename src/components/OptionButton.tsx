@@ -32,32 +32,11 @@ const OptionButton = () => {
     setOpen('');
   };
 
-  const changeCustomOption = (idx: string, data: number) => {
-    const temp = { ...options };
-    if (idx === 'xNum') {
-      if (data > 50) {
-        data = 50;
-      } else if (data < 8) {
-        data = 8;
-      }
-      temp.xNum = data;
-    } else if (idx === 'yNum') {
-      if (data > 50) {
-        data = 50;
-      } else if (data < 8) {
-        data = 8;
-      }
-      temp.yNum = data;
-    } else {
-      if (data > (options.xNum * options.yNum) / 3) {
-        data = Math.round((temp.xNum * temp.yNum) / 3);
-      }
-      temp.minesNum = data;
-    }
-    if (temp.minesNum > (options.xNum * options.yNum) / 3) {
-      temp.minesNum = Math.round((temp.xNum * temp.yNum) / 3);
-    }
-    dispatch(setCustomOptions(temp));
+  const changeCustomOption = (
+    target: 'yNum' | 'xNum' | 'minesNum',
+    data: number,
+  ) => {
+    dispatch(setCustomOptions({ target, data }));
   };
 
   const optionOpen = (opt: string) => {
