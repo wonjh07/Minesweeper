@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import {
+  failGame,
   openBtn,
   removeFlag,
   setFlag,
@@ -10,11 +11,12 @@ import {
 import { textColor } from '../styles/theme';
 import { FaBomb } from 'react-icons/fa';
 import { BsFillFlagFill, BsFlag } from 'react-icons/bs';
+import { AiOutlineClose } from 'react-icons/ai';
 
 const Buttons = () => {
   const mineMap = useAppSelector((state) => state.mines.mineMap);
   const vstMap = useAppSelector((state) => state.mines.vstMap);
-  const started = useAppSelector((state) => state.mines.started);
+  const status = useAppSelector((state) => state.mines.status);
   const dispatch = useAppDispatch();
   const { yNum, xNum } = useAppSelector((state) => state.mines.option);
 
@@ -27,21 +29,23 @@ const Buttons = () => {
   };
 
   const startGame = () => {
-    dispatch(setGameState(true));
+    dispatch(setGameState('started'));
   };
 
-  const failGame = () => {};
+  const mineBombs = () => {
+    dispatch(failGame());
+  };
 
   const btnPush = (yi: number, xi: number) => {
-    if (!started) {
+    if (status === 'idle') {
       newMinesMap(yi, xi);
       startGame();
     }
     if (vstMap[yi][xi] === 0) {
       openButton(yi, xi);
     }
-    if (vstMap[yi][xi] === -1) {
-      failGame();
+    if (mineMap[yi][xi] === -1) {
+      mineBombs();
     }
   };
 
@@ -86,6 +90,16 @@ const Buttons = () => {
                 style={{ position: 'relative', color: 'black' }}
               />
             </Flag>
+          )}
+          {x === 3 && (
+            <>
+              <FaBomb size={16} style={{ marginBottom: '3px' }} />
+
+              <AiOutlineClose
+                size={16}
+                style={{ position: 'absolute', color: 'red' }}
+              />
+            </>
           )}
         </Button>
       )),
@@ -135,7 +149,6 @@ const Button = styled.div<{ checked: boolean }>`
   font-size: 1rem;
   font-weight: bold;
   user-select: none;
-  transition: 0.05s;
   cursor: pointer;
 `;
 

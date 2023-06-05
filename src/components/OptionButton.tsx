@@ -37,11 +37,15 @@ const OptionButton = () => {
     if (idx === 'xNum') {
       if (data > 50) {
         data = 50;
+      } else if (data < 8) {
+        data = 8;
       }
       temp.xNum = data;
     } else if (idx === 'yNum') {
       if (data > 50) {
         data = 50;
+      } else if (data < 8) {
+        data = 8;
       }
       temp.yNum = data;
     } else {
@@ -56,7 +60,7 @@ const OptionButton = () => {
     dispatch(setCustomOptions(temp));
   };
 
-  const modalOpen = (opt: string) => {
+  const optionOpen = (opt: string) => {
     if (open === opt) {
       setOpen('');
     } else {
@@ -69,13 +73,13 @@ const OptionButton = () => {
       <Container>
         <OptionBtn
           onClick={() => {
-            modalOpen('game');
+            optionOpen('game');
           }}>
           Game
         </OptionBtn>
         <OptionBtn
           onClick={() => {
-            modalOpen('option');
+            optionOpen('option');
           }}>
           Custom Option
         </OptionBtn>
@@ -93,7 +97,7 @@ const OptionButton = () => {
               <CustomText>Width:</CustomText>
               <CustomInput
                 type="number"
-                value={options.xNum}
+                defaultValue={options.xNum}
                 onChange={(e) => {
                   changeCustomOption('xNum', Number(e.target.value));
                 }}
@@ -104,7 +108,7 @@ const OptionButton = () => {
               <CustomText>Height:</CustomText>
               <CustomInput
                 type="number"
-                value={options.yNum}
+                defaultValue={options.yNum}
                 onChange={(e) => {
                   changeCustomOption('yNum', Number(e.target.value));
                 }}
@@ -115,7 +119,7 @@ const OptionButton = () => {
               <CustomText>Mines:</CustomText>
               <CustomInput
                 type="number"
-                value={options.minesNum}
+                defaultValue={options.minesNum}
                 onChange={(e) => {
                   changeCustomOption('minesNum', Number(e.target.value));
                 }}

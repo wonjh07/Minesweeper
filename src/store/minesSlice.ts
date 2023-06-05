@@ -1,5 +1,11 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { detectZeros, initMap } from '../components/utils';
+import {
+  detectZeros,
+  flagsFinder,
+  initMap,
+  minesFinder,
+} from '../components/utils';
+
 interface OptionState {
   yNum: number;
   xNum: number;
@@ -10,9 +16,10 @@ interface MineMapState {
   mineMap: number[][];
   vstMap: number[][];
   flags: number;
+  time: number;
   option: OptionState;
   customOption: OptionState;
-  started: boolean;
+  status: 'started' | 'idle' | 'fail' | 'sucess';
 }
 
 interface CoordinateState {
@@ -30,6 +37,7 @@ const initialState: MineMapState = {
     [0, 0],
   ],
   flags: 0,
+  time: 0,
   option: {
     yNum: 8,
     xNum: 8,
@@ -40,22 +48,23 @@ const initialState: MineMapState = {
     xNum: 8,
     minesNum: 10,
   },
-  started: false,
+  status: 'idle',
 };
 
 export const minesSlice = createSlice({
   name: 'mines',
   initialState: initialState,
   reducers: {
-    initVstMap: (state) => {
+    resetGame: (state) => {
       state.vstMap = new Array<number[]>(state.option.yNum)
         .fill([])
         .map(() => new Array<number>(state.option.xNum).fill(0));
-    },
-    initMineMap: (state) => {
       state.mineMap = new Array<number[]>(state.option.yNum)
         .fill([])
         .map(() => new Array<number>(state.option.xNum).fill(0));
+      state.flags = 0;
+      state.time = 0;
+      state.status = 'idle';
     },
     setMineMap: (state, action: PayloadAction<CoordinateState>) => {
       const [y, x] = [action.payload.yi, action.payload.xi];
@@ -82,17 +91,30 @@ export const minesSlice = createSlice({
           state.option.yNum,
           state.option.xNum,
         );
+        state.flags = flagsFinder(
+          state.vstMap,
+          state.option.yNum,
+          state.option.xNum,
+        );
       }
       state.vstMap[y][x] = 1;
     },
+    setTimeUp: (state) => {
+      state.time++;
+    },
     setFlag: (state, action: PayloadAction<CoordinateState>) => {
       state.vstMap[action.payload.yi][action.payload.xi] = 2;
+      state.flags++;
     },
     removeFlag: (state, action: PayloadAction<CoordinateState>) => {
       state.vstMap[action.payload.yi][action.payload.xi] = 0;
+      state.flags--;
     },
-    setGameState: (state, action: PayloadAction<boolean>) => {
-      state.started = action.payload;
+    setGameState: (
+      state,
+      action: PayloadAction<'started' | 'idle' | 'fail' | 'sucess'>,
+    ) => {
+      state.status = action.payload;
     },
     setOptions: (state, action: PayloadAction<OptionState>) => {
       state.option = action.payload;
@@ -103,20 +125,30 @@ export const minesSlice = createSlice({
     setCustomOptions: (state, action: PayloadAction<OptionState>) => {
       state.customOption = action.payload;
     },
+    failGame: (state) => {
+      minesFinder(
+        state.mineMap,
+        state.vstMap,
+        state.option.yNum,
+        state.option.xNum,
+      );
+      state.status = 'fail';
+    },
   },
 });
 
 export const {
-  initMineMap,
-  initVstMap,
+  resetGame,
   setMineMap,
   setVstMap,
   openBtn,
+  setTimeUp,
   setFlag,
   removeFlag,
   setGameState,
   setOptions,
   setCustomMode,
   setCustomOptions,
+  failGame,
 } = minesSlice.actions;
 export default minesSlice.reducer;

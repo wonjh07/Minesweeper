@@ -15,7 +15,7 @@ export const textColor = (num: number) => {
     return 'coral';
   }
   if (num === 6) {
-    return 'lime';
+    return 'deepPink';
   }
   if (num === 7) {
     return 'purple';

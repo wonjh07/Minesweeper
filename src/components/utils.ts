@@ -16,7 +16,7 @@ export const initMap = (
     for (let i = 0; i < mines; i++) {
       array[i] = -1;
     }
-    array.sort(() => Math.random() - 0.5);
+    array.sort(() => Math.random() - 0.5).sort(() => Math.random() - 0.5);
 
     // 2차원 배열로 변환
     for (let i = 0; i < y; i++) {
@@ -140,6 +140,36 @@ export const detectZeros = (
           }
           vst[a][b] = 1;
         }
+      }
+    }
+  }
+};
+
+export const flagsFinder = (vst: number[][], height: number, width: number) => {
+  let cnt = 0;
+  for (let i = 0; i < height; i++) {
+    for (let j = 0; j < width; j++) {
+      if (vst[i][j] === 2) {
+        cnt += 1;
+      }
+    }
+  }
+  return cnt;
+};
+
+export const minesFinder = (
+  lst: number[][],
+  vst: number[][],
+  height: number,
+  width: number,
+) => {
+  for (let i = 0; i < height; i++) {
+    for (let j = 0; j < width; j++) {
+      if (lst[i][j] === -1) {
+        vst[i][j] = 1;
+      }
+      if (lst[i][j] !== -1 && vst[i][j] === 2) {
+        vst[i][j] = 3;
       }
     }
   }

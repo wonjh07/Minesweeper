@@ -1,36 +1,74 @@
 import styled from 'styled-components';
-import { AiFillSmile, AiOutlineSmile } from 'react-icons/ai';
+import {
+  FaSadTear,
+  FaRegSadTear,
+  FaSmile,
+  FaRegSmile,
+  FaSmileWink,
+  FaRegSmileWink,
+} from 'react-icons/fa';
 import Buttons from './Buttons';
 import { useCallback, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { initMineMap, initVstMap, setGameState } from '../store/minesSlice';
+import { resetGame } from '../store/minesSlice';
 import OptionButton from './OptionButton';
+import Timer from './Timer';
+import FlagCount from './FlagCount';
 
 const MineSwipper = () => {
   const option = useAppSelector((state) => state.mines.option);
+  const status = useAppSelector((state) => state.mines.status);
   const dispatch = useAppDispatch();
 
-  const resetMineMap = useCallback(() => {
-    dispatch(initMineMap());
+  const reset = useCallback(() => {
+    dispatch(resetGame());
   }, [dispatch]);
-
-  const resetVstMap = useCallback(() => {
-    dispatch(initVstMap());
-  }, [dispatch]);
-
-  const stopGame = useCallback(() => {
-    dispatch(setGameState(false));
-  }, [dispatch]);
-
-  const resetGame = useCallback(() => {
-    resetMineMap();
-    resetVstMap();
-    stopGame();
-  }, [resetMineMap, resetVstMap, stopGame]);
 
   useEffect(() => {
-    resetGame();
-  }, [resetGame, option]);
+    reset();
+  }, [reset, option]);
+
+  const getIcons = () => {
+    if (status === 'fail') {
+      return (
+        <>
+          <FaSadTear
+            size={24}
+            style={{ position: 'relative', color: 'yellow' }}
+          />
+          <FaRegSadTear
+            size={24}
+            style={{ position: 'absolute', color: 'black' }}
+          />
+        </>
+      );
+    }
+
+    if (status === 'sucess') {
+      return (
+        <>
+          <FaSmileWink
+            size={24}
+            style={{ position: 'relative', color: 'yellow' }}
+          />
+          <FaRegSmileWink
+            size={24}
+            style={{ position: 'absolute', color: 'black' }}
+          />
+        </>
+      );
+    }
+
+    return (
+      <>
+        <FaSmile size={24} style={{ position: 'relative', color: 'yellow' }} />
+        <FaRegSmile
+          size={24}
+          style={{ position: 'absolute', color: 'black' }}
+        />
+      </>
+    );
+  };
 
   return (
     <>
@@ -42,21 +80,18 @@ const MineSwipper = () => {
           <GameBox>
             <OptionButton />
             <TimerBox>
-              <Timer></Timer>
+              <BlackBox>
+                <FlagCount />
+              </BlackBox>
               <SmileBox
                 onClick={() => {
-                  resetGame();
+                  reset();
                 }}>
-                <AiOutlineSmile
-                  size={26}
-                  style={{ position: 'relative', color: 'black' }}
-                />
-                <AiFillSmile
-                  size={26}
-                  style={{ position: 'absolute', color: 'yellow' }}
-                />
+                {getIcons()}
               </SmileBox>
-              <Timer></Timer>
+              <BlackBox>
+                <Timer />
+              </BlackBox>
             </TimerBox>
             <Buttons />
           </GameBox>
@@ -109,7 +144,7 @@ const TimerBox = styled.div`
   margin-bottom: 0.5rem;
 `;
 
-const Timer = styled.div`
+const BlackBox = styled.div`
   width: 3.2rem;
   height: 100%;
   background-color: black;
