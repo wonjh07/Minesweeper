@@ -11,13 +11,24 @@ import { textColor } from '../styles/theme';
 import { FaBomb } from 'react-icons/fa';
 import { BsFillFlagFill, BsFlag } from 'react-icons/bs';
 import { AiOutlineClose } from 'react-icons/ai';
+import { useEffect, useState } from 'react';
 
 const Buttons = () => {
   const mineMap = useAppSelector((state) => state.mines.mineMap);
   const vstMap = useAppSelector((state) => state.mines.vstMap);
   const status = useAppSelector((state) => state.mines.status);
+  const [disable, setDisable] = useState(false);
   const dispatch = useAppDispatch();
   const { yNum, xNum } = useAppSelector((state) => state.mines.option);
+
+  // 게임 실패혹은 성공시 오작동 방지를 위해 버튼을 잠금
+  useEffect(() => {
+    if (status === 'fail' || status === 'success') {
+      setDisable(true);
+    } else {
+      setDisable(false);
+    }
+  }, [status]);
 
   const newMinesMap = (yi: number, xi: number) => {
     dispatch(setMineMap({ yi, xi }));
@@ -107,7 +118,7 @@ const Buttons = () => {
 
   return (
     <>
-      <GridBox wd={xNum} ht={yNum}>
+      <GridBox disable={disable} wd={xNum} ht={yNum}>
         {spawnBtn()}
       </GridBox>
     </>
@@ -116,7 +127,7 @@ const Buttons = () => {
 
 export default Buttons;
 
-const GridBox = styled.div<{ wd: number; ht: number }>`
+const GridBox = styled.div<{ disable: boolean; wd: number; ht: number }>`
   width: 100%;
   height: 100%;
   display: grid;
@@ -130,6 +141,7 @@ const GridBox = styled.div<{ wd: number; ht: number }>`
   grid-gap: 1px;
   background-color: gray;
   border-radius: 1px;
+  pointer-events: ${(props) => (props.disable ? 'none' : '')};
 `;
 
 const Button = styled.div<{ checked: boolean }>`
