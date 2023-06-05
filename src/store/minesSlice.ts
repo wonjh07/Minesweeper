@@ -17,9 +17,10 @@ interface MineMapState {
   vstMap: number[][];
   flags: number;
   time: number;
+  buttons: number;
   option: OptionState;
   customOption: OptionState;
-  status: 'started' | 'idle' | 'fail' | 'sucess';
+  status: 'started' | 'idle' | 'fail' | 'success';
 }
 
 interface CoordinateState {
@@ -38,6 +39,7 @@ const initialState: MineMapState = {
   ],
   flags: 0,
   time: 0,
+  buttons: 64,
   option: {
     yNum: 8,
     xNum: 8,
@@ -68,6 +70,8 @@ export const minesSlice = createSlice({
     },
     setMineMap: (state, action: PayloadAction<CoordinateState>) => {
       const [y, x] = [action.payload.yi, action.payload.xi];
+      state.buttons =
+        state.option.yNum * state.option.xNum - state.option.minesNum;
       state.mineMap = initMap(
         state.option.yNum,
         state.option.xNum,
@@ -83,7 +87,7 @@ export const minesSlice = createSlice({
       const [y, x] = [action.payload.yi, action.payload.xi];
       const value = state.mineMap[y][x];
       if (value === 0) {
-        detectZeros(
+        state.buttons -= detectZeros(
           state.mineMap,
           state.vstMap,
           y,
@@ -96,8 +100,10 @@ export const minesSlice = createSlice({
           state.option.yNum,
           state.option.xNum,
         );
+      } else {
+        state.vstMap[y][x] = 1;
+        state.buttons -= 1;
       }
-      state.vstMap[y][x] = 1;
     },
     setTimeUp: (state) => {
       state.time++;
@@ -112,7 +118,7 @@ export const minesSlice = createSlice({
     },
     setGameState: (
       state,
-      action: PayloadAction<'started' | 'idle' | 'fail' | 'sucess'>,
+      action: PayloadAction<'started' | 'idle' | 'fail' | 'success'>,
     ) => {
       state.status = action.payload;
     },

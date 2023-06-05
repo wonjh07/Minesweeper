@@ -123,6 +123,8 @@ export const detectZeros = (
   const que = new Queue();
   // que 초기값
   que.append(yi, xi);
+  vst[yi][xi] = 1;
+  let pushedCnt = 1;
 
   // BFS로 연결된 0 주변 노드 확인해서 모두 오픈
   while (que) {
@@ -130,7 +132,6 @@ export const detectZeros = (
     if (y === null || y === undefined || x === null || x === undefined) {
       break;
     }
-    vst[y][x] = 1;
     for (let d = 0; d < 8; d++) {
       const [a, b] = [y + dy[d], x + dx[d]];
       if (0 <= a && a < height && 0 <= b && b < width) {
@@ -139,10 +140,12 @@ export const detectZeros = (
             que.append(a, b);
           }
           vst[a][b] = 1;
+          pushedCnt += 1;
         }
       }
     }
   }
+  return pushedCnt;
 };
 
 export const flagsFinder = (vst: number[][], height: number, width: number) => {

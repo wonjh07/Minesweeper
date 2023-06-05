@@ -25,7 +25,7 @@ const Timer = () => {
       return () => clearInterval(timer);
     } else if (status === 'idle') {
       setTimeStr('000');
-    } else if (status === 'fail' || status === 'sucess') {
+    } else if (status === 'fail' || status === 'success') {
       console.log('finish');
     }
   }, [status, timeUp]);

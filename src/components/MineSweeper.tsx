@@ -14,6 +14,7 @@ import { resetGame } from '../store/minesSlice';
 import OptionButton from './OptionButton';
 import Timer from './Timer';
 import FlagCount from './FlagCount';
+import SucessModal from './SucessModal';
 
 const MineSwipper = () => {
   const option = useAppSelector((state) => state.mines.option);
@@ -44,7 +45,7 @@ const MineSwipper = () => {
       );
     }
 
-    if (status === 'sucess') {
+    if (status === 'success') {
       return (
         <>
           <FaSmileWink
@@ -76,6 +77,7 @@ const MineSwipper = () => {
         onContextMenu={(e) => {
           e.preventDefault();
         }}>
+        <SucessModal />
         <FlexBox>
           <GameBox>
             <OptionButton />

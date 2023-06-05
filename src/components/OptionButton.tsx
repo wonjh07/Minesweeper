@@ -223,7 +223,7 @@ const CustomText = styled.div`
 
 const WarnText = styled.div`
   position: absolute;
-  transform: translateX(12rem) translateY(-2.5rem);
+  transform: translateX(11.5rem) translateY(-2.5rem);
   width: 200%;
   height: 100%;
   box-sizing: border-box;
