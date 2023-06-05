@@ -81,10 +81,14 @@ const Buttons = () => {
             btnPush(yi, xi);
           }}>
           {x === 1 && (
-            <BtnNums style={{ color: textColor(mineMap[yi][xi]) }}>
+            <BtnNums
+              style={{
+                color: textColor(mineMap[yi][xi]),
+                backgroundColor: mineMap[yi][xi] === -2 ? 'red' : '',
+              }}>
               {mineMap[yi][xi] > 0 && mineMap[yi][xi]}
               {mineMap[yi][xi] === 0 && null}
-              {mineMap[yi][xi] === -1 && (
+              {mineMap[yi][xi] < 0 && (
                 <FaBomb size={16} style={{ marginBottom: '3px' }} />
               )}
             </BtnNums>
@@ -104,7 +108,6 @@ const Buttons = () => {
           {x === 3 && (
             <>
               <FaBomb size={16} style={{ marginBottom: '3px' }} />
-
               <AiOutlineClose
                 size={16}
                 style={{ position: 'absolute', color: 'red' }}
@@ -166,7 +169,7 @@ const Button = styled.div<{ checked: boolean }>`
 const BtnNums = styled.div`
   width: 100%;
   height: 100%;
-  margin-top: 3px;
+  padding-top: 3px;
   box-sizing: border-box;
   display: flex;
   align-items: center;

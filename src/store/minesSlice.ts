@@ -92,6 +92,9 @@ export const minesSlice = createSlice({
     openBtn: (state, action: PayloadAction<CoordinateState>) => {
       const [y, x] = [action.payload.yi, action.payload.xi];
       const value = state.mineMap[y][x];
+      if (value === -1) {
+        state.mineMap[y][x] = -2;
+      }
       if (value === 0) {
         state.buttons -= detectZeros(
           state.mineMap,
