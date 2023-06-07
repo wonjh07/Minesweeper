@@ -44,32 +44,32 @@ const SucessModal = () => {
 export default SucessModal;
 
 const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: absolute;
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.2);
   z-index: 10;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 `;
 
 const Modal = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   width: 40%;
   aspect-ratio: 1.5;
-  background-color: #b9b9b9;
-  padding: 2rem;
   box-sizing: border-box;
+  gap: 2rem;
+  padding: 2rem;
   border-bottom: 3px solid #606367;
   border-right: 3px solid #606367;
   border-top: 2px solid #f1f3f4;
   border-left: 2px solid #f1f3f4;
   border-radius: 1px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 2rem;
+  background-color: #b9b9b9;
 `;
 
 const Title = styled.p`

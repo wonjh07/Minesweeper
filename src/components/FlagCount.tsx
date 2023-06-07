@@ -11,34 +11,32 @@ const FlagCount = () => {
   }, [flags]);
 
   return (
-    <>
-      <Component>
-        <Number>{cnt[0]}</Number>
-        <Number>{cnt[1]}</Number>
-        <Number>{cnt[2]}</Number>
-      </Component>
-    </>
+    <Component>
+      <Number>{cnt[0]}</Number>
+      <Number>{cnt[1]}</Number>
+      <Number>{cnt[2]}</Number>
+    </Component>
   );
 };
 
 export default FlagCount;
 
 const Component = styled.div`
-  width: 100%;
-  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
   padding-top: 0.3rem;
+  box-sizing: border-box;
   user-select: none;
 `;
 
 const Number = styled.div`
-  width: 0.9rem;
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 0.9rem;
   color: red;
   font-size: 1.4rem;
 `;

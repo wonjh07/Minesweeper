@@ -14,12 +14,12 @@ import { AiOutlineClose } from 'react-icons/ai';
 import { useEffect, useState } from 'react';
 
 const Buttons = () => {
+  const [disable, setDisable] = useState(false);
   const mineMap = useAppSelector((state) => state.mines.mineMap);
   const vstMap = useAppSelector((state) => state.mines.vstMap);
   const status = useAppSelector((state) => state.mines.status);
-  const [disable, setDisable] = useState(false);
-  const dispatch = useAppDispatch();
   const { yNum, xNum } = useAppSelector((state) => state.mines.option);
+  const dispatch = useAppDispatch();
 
   // 게임 실패혹은 성공시 오작동 방지를 위해 버튼을 잠금
   useEffect(() => {
@@ -30,25 +30,13 @@ const Buttons = () => {
     }
   }, [status]);
 
-  const newMinesMap = (yi: number, xi: number) => {
+  const newMinesMap = (yi: number, xi: number) =>
     dispatch(setMineMap({ yi, xi }));
-  };
 
-  const openButton = (yi: number, xi: number) => {
-    dispatch(openBtn({ yi, xi }));
-  };
-
-  const startGame = () => {
-    dispatch(setGameState('started'));
-  };
-
-  const mineBombs = () => {
-    dispatch(failGame());
-  };
-
-  const btnFlag = (yi: number, xi: number) => {
-    dispatch(setFlag({ yi, xi }));
-  };
+  const openButton = (yi: number, xi: number) => dispatch(openBtn({ yi, xi }));
+  const btnFlag = (yi: number, xi: number) => dispatch(setFlag({ yi, xi }));
+  const startGame = () => dispatch(setGameState('started'));
+  const mineBombs = () => dispatch(failGame());
 
   // btnPush() : 버튼이 눌리면 실행되는 함수
   const btnPush = (yi: number, xi: number) => {
@@ -77,9 +65,7 @@ const Buttons = () => {
             e.preventDefault();
             btnFlag(yi, xi);
           }}
-          onClick={() => {
-            btnPush(yi, xi);
-          }}>
+          onClick={() => btnPush(yi, xi)}>
           {x === 1 && (
             <BtnNums
               style={{
@@ -120,46 +106,44 @@ const Buttons = () => {
   };
 
   return (
-    <>
-      <GridBox disable={disable} wd={xNum} ht={yNum}>
-        {spawnBtn()}
-      </GridBox>
-    </>
+    <GridBox disable={disable} wd={xNum} ht={yNum}>
+      {spawnBtn()}
+    </GridBox>
   );
 };
 
 export default Buttons;
 
 const GridBox = styled.div<{ disable: boolean; wd: number; ht: number }>`
+  display: grid;
+  grid-template-columns: repeat(${(props) => props.wd}, 1.2rem);
+  grid-template-rows: repeat(${(props) => props.ht}, 1.2rem);
+  grid-gap: 1px;
   width: 100%;
   height: 100%;
-  display: grid;
   box-sizing: border-box;
   border-bottom: 2px solid #f1f3f4;
   border-right: 2px solid #f1f3f4;
   border-top: 3px solid #606367;
   border-left: 3px solid #606367;
-  grid-template-columns: repeat(${(props) => props.wd}, 1.2rem);
-  grid-template-rows: repeat(${(props) => props.ht}, 1.2rem);
-  grid-gap: 1px;
-  background-color: gray;
   border-radius: 1px;
+  background-color: gray;
   pointer-events: ${(props) => (props.disable ? 'none' : '')};
 `;
 
 const Button = styled.div<{ checked: boolean }>`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 1.2rem;
   height: 1.2rem;
+  box-sizing: border-box;
   background-color: ${(props) => (props.checked ? '#cccccc' : '#B9B9B9')};
   border-radius: ${(props) => (props.checked ? '' : '1px')};
   border-bottom: ${(props) => (props.checked ? '' : '2px solid #606367')};
   border-right: ${(props) => (props.checked ? '' : '2px solid #606367')};
   border-top: ${(props) => (props.checked ? '' : '2px solid #f1f3f4')};
   border-left: ${(props) => (props.checked ? '' : '2px solid #f1f3f4')};
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   font-size: 1rem;
   font-weight: bold;
   user-select: none;
@@ -167,19 +151,19 @@ const Button = styled.div<{ checked: boolean }>`
 `;
 
 const BtnNums = styled.div`
-  width: 100%;
-  height: 100%;
-  padding-top: 3px;
-  box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  padding-top: 3px;
 `;
 
 const Flag = styled.div`
-  width: 100%;
-  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
+  height: 100%;
 `;

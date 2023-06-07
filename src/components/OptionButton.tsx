@@ -50,16 +50,8 @@ const OptionButton = () => {
   return (
     <>
       <Container>
-        <OptionBtn
-          onClick={() => {
-            optionOpen('game');
-          }}>
-          Game
-        </OptionBtn>
-        <OptionBtn
-          onClick={() => {
-            optionOpen('option');
-          }}>
+        <OptionBtn onClick={() => optionOpen('game')}>Game</OptionBtn>
+        <OptionBtn onClick={() => optionOpen('option')}>
           Custom Option
         </OptionBtn>
         {open === 'game' && (
@@ -77,9 +69,9 @@ const OptionButton = () => {
               <CustomInput
                 type="number"
                 defaultValue={options.xNum}
-                onChange={(e) => {
-                  changeCustomOption('xNum', Number(e.target.value));
-                }}
+                onChange={(e) =>
+                  changeCustomOption('xNum', Number(e.target.value))
+                }
               />
               <CustomText>(8~50)</CustomText>
             </CustomOption>
@@ -88,9 +80,9 @@ const OptionButton = () => {
               <CustomInput
                 type="number"
                 defaultValue={options.yNum}
-                onChange={(e) => {
-                  changeCustomOption('yNum', Number(e.target.value));
-                }}
+                onChange={(e) =>
+                  changeCustomOption('yNum', Number(e.target.value))
+                }
               />
               <CustomText>(8~50)</CustomText>
             </CustomOption>
@@ -99,9 +91,9 @@ const OptionButton = () => {
               <CustomInput
                 type="number"
                 defaultValue={options.minesNum}
-                onChange={(e) => {
-                  changeCustomOption('minesNum', Number(e.target.value));
-                }}
+                onChange={(e) =>
+                  changeCustomOption('minesNum', Number(e.target.value))
+                }
               />
               <CustomText>(10~883)</CustomText>
               <WarnText>지뢰의 갯수는 전체의 1/3을 넘을수 없습니다</WarnText>
@@ -116,22 +108,22 @@ const OptionButton = () => {
 export default OptionButton;
 
 const Container = styled.div`
-  width: 100%;
-  height: 1.4rem;
   display: flex;
   align-items: start;
   justify-content: start;
+  width: 100%;
+  height: 1.4rem;
 `;
 
 const OptionBtn = styled.div`
   position: relative;
   top: -2px;
   left: -3px;
-  border-radius: 2px;
-  padding: 2px 4px;
   box-sizing: border-box;
-  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 2px;
   user-select: none;
+  cursor: pointer;
 
   &:hover {
     background-color: gray;
@@ -143,72 +135,72 @@ const OptionBtn = styled.div`
 `;
 
 const GameOptBox = styled.div`
-  position: absolute;
-  transform: translateX(-0.62rem) translateY(-6.6rem);
   display: flex;
   flex-direction: column;
   align-items: start;
   justify-content: start;
-  gap: 4px;
+  position: absolute;
+  transform: translateX(-0.62rem) translateY(-6.6rem);
   width: 5rem;
   height: 5rem;
   padding: 0.5rem;
+  gap: 4px;
   border-radius: 2px;
-  background-color: #b9b9b9;
   border-right: 3px solid #606367;
   border-top: 2px solid #f1f3f4;
   border-left: 2px solid #f1f3f4;
+  background-color: #b9b9b9;
   font-size: 0.9rem;
 `;
 
 const CustomOptBox = styled.div`
-  position: absolute;
-  transform: translateX(-0.62rem) translateY(-6.6rem);
   display: flex;
   flex-direction: column;
   align-items: start;
   justify-content: start;
-  gap: 10px;
+  position: absolute;
+  transform: translateX(-0.62rem) translateY(-6.6rem);
   width: 10.346rem;
   height: 5rem;
+  gap: 10px;
   padding: 0.5rem;
   border-radius: 2px;
-  background-color: #b9b9b9;
   border-right: 3px solid #606367;
   border-top: 2px solid #f1f3f4;
   border-left: 2px solid #f1f3f4;
+  background-color: #b9b9b9;
   font-size: 0.9rem;
 `;
 
 const CustomOption = styled.div`
-  width: 100%;
-  height: 1rem;
-  box-sizing: border-box;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: start;
+  width: 100%;
+  height: 1rem;
+  box-sizing: border-box;
   gap: 0.4rem;
 `;
 
 const CustomText = styled.div`
-  width: 2.5rem;
-  height: 100%;
-  box-sizing: border-box;
   display: flex;
   align-items: end;
   justify-content: start;
+  width: 2.5rem;
+  height: 100%;
+  box-sizing: border-box;
 `;
 
 const WarnText = styled.div`
+  display: flex;
+  align-items: end;
+  justify-content: start;
   position: absolute;
   transform: translateX(11.5rem) translateY(-2.5rem);
   width: 200%;
   height: 100%;
   box-sizing: border-box;
-  display: flex;
-  align-items: end;
-  justify-content: start;
   color: #d63725;
 `;
 

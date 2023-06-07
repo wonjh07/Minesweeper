@@ -74,10 +74,7 @@ const MineSwipper = () => {
 
   return (
     <>
-      <Container
-        onContextMenu={(e) => {
-          e.preventDefault();
-        }}>
+      <Container onContextMenu={(e) => e.preventDefault()}>
         <SucessModal />
         <FlexBox>
           <GameBox>
@@ -86,12 +83,7 @@ const MineSwipper = () => {
               <BlackBox>
                 <FlagCount />
               </BlackBox>
-              <SmileBox
-                onClick={() => {
-                  reset();
-                }}>
-                {getIcons()}
-              </SmileBox>
+              <SmileBox onClick={() => reset()}>{getIcons()}</SmileBox>
               <BlackBox>
                 <Timer />
               </BlackBox>
@@ -113,38 +105,38 @@ const Container = styled.div`
 `;
 
 const FlexBox = styled.div`
-  width: 100%;
-  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
+  height: 100%;
 `;
 
 const GameBox = styled.div`
   width: auto;
   height: auto;
-  background-color: #b9b9b9;
-  padding: 0.5rem;
   box-sizing: border-box;
+  padding: 0.5rem;
   border-bottom: 3px solid #606367;
   border-right: 3px solid #606367;
   border-top: 2px solid #f1f3f4;
   border-left: 2px solid #f1f3f4;
   border-radius: 1px;
+  background-color: #b9b9b9;
 `;
 
 const TimerBox = styled.div`
-  width: 100%;
-  height: 2.4rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  width: 100%;
+  height: 2.4rem;
+  box-sizing: border-box;
+  margin-bottom: 0.5rem;
   border-bottom: 2px solid #f1f3f4;
   border-right: 2px solid #f1f3f4;
   border-top: 3px solid #606367;
   border-left: 3px solid #606367;
-  box-sizing: border-box;
-  margin-bottom: 0.5rem;
 `;
 
 const BlackBox = styled.div`
@@ -154,12 +146,12 @@ const BlackBox = styled.div`
 `;
 
 const SmileBox = styled.div`
-  height: 100%;
-  aspect-ratio: 1;
-  box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;
+  height: 100%;
+  aspect-ratio: 1;
+  box-sizing: border-box;
   border-bottom: 3px solid #606367;
   border-right: 3px solid #606367;
   border-top: 2px solid #f1f3f4;

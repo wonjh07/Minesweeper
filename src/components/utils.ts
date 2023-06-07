@@ -170,7 +170,7 @@ export const detectZeros = (
 
 // flagsFinder() :
 // detectZeros()가 실행된 이후 지뢰가 아닌 공간에 세워진 깃발도
-// 연쇄작용에 의해 오픈되어지므로 현재 깃발의 갯수를 찾아 재설정하는 함수
+// 연쇄작용에 의해 오픈되어지므로 현재 깃발의 갯수를 재설정하는 함수
 export const flagsFinder = (vst: number[][], height: number, width: number) => {
   let cnt = 0;
   for (let i = 0; i < height; i++) {

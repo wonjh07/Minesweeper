@@ -36,34 +36,32 @@ const Timer = () => {
   }, [time, mineBombs]);
 
   return (
-    <>
-      <Component>
-        <Number>{timeStr[0]}</Number>
-        <Number>{timeStr[1]}</Number>
-        <Number>{timeStr[2]}</Number>
-      </Component>
-    </>
+    <Component>
+      <Number>{timeStr[0]}</Number>
+      <Number>{timeStr[1]}</Number>
+      <Number>{timeStr[2]}</Number>
+    </Component>
   );
 };
 
 export default Timer;
 
 const Component = styled.div`
-  width: 100%;
-  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
+  height: 100%;
   box-sizing: border-box;
   padding-top: 0.3rem;
   user-select: none;
 `;
 
 const Number = styled.div`
-  width: 0.9rem;
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 0.9rem;
   color: red;
   font-size: 1.4rem;
 `;
