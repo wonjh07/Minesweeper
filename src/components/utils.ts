@@ -12,47 +12,39 @@ export const initMap = (
     .fill([])
     .map(() => new Array<number>(x).fill(0));
 
-  // 지뢰갯수 만큼 배열에 -1 생성
-  const array = new Array(y * x).fill(0);
-  for (let i = 0; i < mines; i++) {
-    array[i] = -1;
-  }
-
-  // shuffle() : array 랜덤셔플후 2차원 배열로 변환
-  const shuffle = () => {
-    array.sort(() => Math.random() - 0.5);
-    for (let i = 0; i < y; i++) {
-      for (let j = 0; j < x; j++) {
-        lst[i][j] = array[i * x + j];
-      }
-    }
-  };
-
-  shuffle();
-
   // 시작점과 주변 8칸에 대한 벡터값
   const dx = [0, 1, 1, 1, 0, -1, -1, -1];
   const dy = [-1, -1, 0, 1, 1, 1, 0, -1];
 
-  // isSafe() : 시작점을 포함한 주변의 8칸에 지뢰가 존재하지 않는지 확인
-  const isSafe = () => {
-    if (lst[sy][sx] === -1) {
-      return false;
+  // 첫 클릭 구역 주변 유효한 범위 맵에 -2 (safe) 표시
+  // 유효한 범위의 갯수를 safeCnt 에 기록
+  let safeCnt = 0;
+  lst[sy][sx] = -2;
+  for (let d = 0; d < 8; d++) {
+    const [a, b] = [sy + dy[d], sx + dx[d]];
+    if (0 <= a && a < y && 0 <= b && b < x) {
+      lst[a][b] = -2;
+      safeCnt += 1;
     }
+  }
 
-    for (let d = 0; d < 8; d++) {
-      const [a, b] = [sy + dy[d], sx + dx[d]];
-      if (0 <= a && a < y && 0 <= b && b < x && lst[a][b] === -1) {
-        return false;
+  // safeCnt만큼을 제외한 갯수의 1차원 배열을 만들어 지뢰갯수만큼 -1 생성
+  const array = new Array(y * x - safeCnt).fill(0);
+  for (let i = 0; i < mines; i++) {
+    array[i] = -1;
+  }
+
+  // array 랜덤셔플후 2차원 배열에 하나씩 배치
+  // -2 인곳은 무조건 비어있어야 하므로 제외
+  let currentIdx = 0;
+  array.sort(() => Math.random() - 0.5);
+  for (let i = 0; i < y; i++) {
+    for (let j = 0; j < x; j++) {
+      if (lst[i][j] !== -2) {
+        lst[i][j] = array[currentIdx];
+        currentIdx += 1;
       }
     }
-
-    return true;
-  };
-
-  // 클릭한 지점이 0이 될때까지 셔플
-  while (!isSafe()) {
-    shuffle();
   }
 
   // 지뢰를 제외한 모든 칸에 주변의 지뢰갯수를 표기
